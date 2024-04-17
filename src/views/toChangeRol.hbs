@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuario</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Usuario</h1>
+
+    <!-- Mostrar información del usuario actual -->
+    <div class="card">
+        <h3>Usuario Actual:</h3>
+        <p><strong>Nombre:</strong> {{currentUser.fullName}}</p>
+        <p><strong>Email:</strong> {{currentUser.email}}</p>
+        <p><strong>Rol:</strong> {{currentUser.role}}</p>
+    </div>
+
+    <!-- Formulario para cambiar de rol y subir documentos -->
+    <form action="/api/users/{{currentUser.id}}/documents" method="post" enctype="multipart/form-data">
+        <h2>Subir Documentos:</h2>
+        <input type="file" name="document" multiple>
+        <button type="submit">Subir Documentos</button>
+    </form>
+
+    <form action="/premium/{{currentUser.id}}" method="post">
+        <h2>Cambiar Rol a Premium:</h2>
+        <input type="hidden" name="newRole" value="premium">
+        <button type="submit">Cambiar a Premium</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Actualizar dinámicamente la información del usuario en la página
+        function updateUserInfo() {
+            $.ajax({
+                url: '/current',
+                method: 'GET',
+                success: function(data) {
+                    $('.card').html(`
+                        <h3>Usuario Actual:</h3>
+                        <p><strong>Nombre:</strong> ${data.fullName}</p>
+                        <p><strong>Email:</strong> ${data.email}</p>
+                        <p><strong>Rol:</strong> ${data.role}</p>
+                    `);
+                },
+                error: function(err) {
+                    alert('Error al obtener la información del usuario');
+                }
+            });
+        }
+
+        // Añadir eventos a los formularios para actualizar la card después de las operaciones
+        $('form').submit(function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: this.action,
+                method: this.method,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert('Operación exitosa');
+                    updateUserInfo();
+                },
+                error: function(err) {
+                    alert('Error durante la operación');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
