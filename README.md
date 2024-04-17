@@ -19,7 +19,7 @@ Para realizar operaciones que requieren autenticación, sigue estos pasos:
 ## Subida de documentos
 Para subir los documentos requeridos:
 
-- Realiza una solicitud POST a localhost:5000/api/users/65f99ec85c1d5807f09a6af2/documents.
+Realiza una solicitud POST a localhost:5000/api/users/65f99ec85c1d5807f09a6af2/documents.
 En Postman, selecciona body y luego elige form-data.
 Debes incluir tres archivos con las siguientes keys y tipos de archivo:
 
@@ -33,6 +33,8 @@ Asegúrate de adjuntar los archivos correspondientes para cada key.
 Para cambiar el rol del usuario a "premium":
 
 Realiza una solicitud POST a localhost:5000/api/users/premium/65f99ec85c1d5807f09a6af2 con el siguiente body en formato raw y JSON:
+
+     ```json
      {
        "newRole": "premium"
      }
